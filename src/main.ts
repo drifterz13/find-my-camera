@@ -1,24 +1,11 @@
 import * as cheerio from 'cheerio'
 import { Item } from './types'
-import { deleteScrapedFiles, saveResult } from './lib/common'
+import {
+  convertTimeStringToNumber,
+  deleteScrapedFiles,
+  saveResult,
+} from './lib/common'
 import chunk from 'lodash.chunk'
-
-function convertTimeStringToNumber(timeString: string) {
-  const units = timeString.split(' ')
-  const value = parseInt(units[0])
-  const type = units[1]
-
-  switch (type) {
-    case 'day(s)':
-      return value * 24 * 60 * 60
-    case 'hour(s)':
-      return value * 60 * 60
-    case 'min(s)':
-      return value * 60
-    default:
-      return value
-  }
-}
 
 function getItems(html: string) {
   const results = [] as Item[]
@@ -66,6 +53,7 @@ async function scrape() {
 
   const MAX_PAGE = 30
   const BATCH_SIZE = 3
+  const ONE_DAY = 24 * 60 * 60
 
   // Items are sort by time ending soonest.
   const url = `https://buyee.jp/item/search/query/${keyword}/category/${category}?aucmaxprice=${maxPrice}&sort=end&order=a`
@@ -90,7 +78,7 @@ async function scrape() {
 
     // Check reasonable time range
     const atleastOneItemIsForTomorrow = results.some(
-      (item) => item.timeRemaining >= 24 * 60 * 60
+      (item) => item.timeRemaining >= ONE_DAY
     )
 
     if (atleastOneItemIsForTomorrow) {
@@ -101,7 +89,7 @@ async function scrape() {
   }
 
   // Today items.
-  const todayItems = results.filter((item) => item.timeRemaining < 24 * 60 * 60)
+  const todayItems = results.filter((item) => item.timeRemaining < ONE_DAY)
   saveResult(todayItems)
 }
 

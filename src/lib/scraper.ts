@@ -75,7 +75,7 @@ export async function scrape() {
 
     const category = '2084261642' // Compact Digital Cameras
     const keyword = encodeURIComponent('canon ixy')
-    const maxPrice = 25000 // 25,000 yen ~ 6000THB
+    const maxPrice = 15000 // 15,000 yen ~ 3500THB
 
     // Items are sort by time ending soonest.
     const url = `https://buyee.jp/item/search/query/${keyword}/category/${category}?aucmaxprice=${maxPrice}&sort=end&order=a`

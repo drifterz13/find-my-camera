@@ -8,6 +8,7 @@ export type RawItem = {
 
 export type Item = {
   auctionId: string
+  url: string
   title: string
   image: string
   price: number

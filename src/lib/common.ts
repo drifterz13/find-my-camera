@@ -37,6 +37,7 @@ export function logMemoryUsage() {
 export function toItem(rawItem: RawItem): Item {
   return {
     ...rawItem,
+    url: `https://buyee.jp/item/yahoo/auction/${rawItem.auctionId}`,
     timeRemaining: convertTimeStringToNumber(rawItem.timeRemaining),
     createdAt: new Date().toISOString(),
   }

@@ -1,23 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { Item } from '../types'
-
-export function convertTimeStringToNumber(timeString: string) {
-  const units = timeString.split(' ')
-  const value = parseInt(units[0])
-  const type = units[1]
-
-  switch (type) {
-    case 'day(s)':
-      return value * 24 * 60 * 60
-    case 'hour(s)':
-      return value * 60 * 60
-    case 'min(s)':
-      return value * 60
-    default:
-      return value
-  }
-}
+import { Item, RawItem } from '../types'
+import { convertTimeStringToNumber } from './time'
 
 export function deleteScrapedFiles() {
   console.log('Deleing old scraped files... 🗑')
@@ -48,4 +32,12 @@ export function logMemoryUsage() {
   console.log(
     `Memory usage: ${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`
   )
+}
+
+export function toItem(rawItem: RawItem): Item {
+  return {
+    ...rawItem,
+    timeRemaining: convertTimeStringToNumber(rawItem.timeRemaining),
+    createdAt: new Date().toISOString(),
+  }
 }

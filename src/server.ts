@@ -1,5 +1,6 @@
 import http from 'node:http'
 import { scrape } from './lib/scraper'
+import { getRecommendItems } from './lib/recommend'
 
 const hostname = '127.0.0.1'
 const port = 8000
@@ -16,9 +17,10 @@ const server = http.createServer(async (req, res) => {
     console.time('scraping time')
     try {
       const data = await scrape()
+      const recommendItems = getRecommendItems(data)
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify(data))
+      res.end(JSON.stringify(recommendItems))
     } catch (error) {
       console.error(error)
 

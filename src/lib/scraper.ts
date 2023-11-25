@@ -1,6 +1,7 @@
 import puppeteer, { Page } from 'puppeteer'
 import { Item, RawItem } from '../types'
 import { logMemoryUsage, toItem } from './common'
+import { convertTimeStringToNumber } from './time'
 
 async function getNextPageEl(page: Page) {
   const nextPageEl = await page.$eval(
@@ -109,7 +110,7 @@ export async function scrape() {
 
       // Check reasonable time range
       const atleastOneItemIsForTomorrow = items.some(
-        (item) => item.timeRemaining > 24 * 60 * 60
+        (item) => convertTimeStringToNumber(item.timeRemaining) > 24 * 60 * 60
       )
 
       if (atleastOneItemIsForTomorrow) {

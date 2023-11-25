@@ -12,6 +12,6 @@ export type Item = {
   title: string
   image: string
   price: number
-  timeRemaining: string
+  timeRemaining: number
   createdAt: string
 }

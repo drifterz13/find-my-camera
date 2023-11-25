@@ -1,10 +1,11 @@
 import http from 'node:http'
 import { scrape } from './lib/scraper'
 import { getRecommendItems } from './lib/recommend'
+import { saveResult } from './lib/common'
 
 const hostname = '127.0.0.1'
 const port = 8000
-const timeout = 1000 * 90 // 90 seconds
+const timeout = 1000 * 120 // 120 seconds
 
 const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && req.url === '/canon-ixy') {
@@ -18,6 +19,8 @@ const server = http.createServer(async (req, res) => {
     try {
       const data = await scrape()
       const recommendItems = getRecommendItems(data)
+
+      saveResult(recommendItems)
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify(recommendItems))

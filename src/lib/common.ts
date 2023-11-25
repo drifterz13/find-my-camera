@@ -20,8 +20,8 @@ export function deleteScrapedFiles() {
   })
 }
 
-export function saveResult(result: Item[]) {
-  const key = new Date().toISOString()
+export function saveResult(result: any) {
+  const key = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
   const filePath = path.resolve(process.cwd(), 'scraped', `${key}.json`)
 
   fs.writeFileSync(filePath, JSON.stringify(result))
@@ -35,9 +35,13 @@ export function logMemoryUsage() {
 }
 
 export function toItem(rawItem: RawItem): Item {
+  const normalizedTitle = rawItem.title.replace(/[^\w\s]/gi, '')
+
   return {
     ...rawItem,
+    title: normalizedTitle,
     url: `https://buyee.jp/item/yahoo/auction/${rawItem.auctionId}`,
+    timeRemaining: convertTimeStringToNumber(rawItem.timeRemaining),
     createdAt: new Date().toISOString(),
   }
 }

@@ -108,17 +108,6 @@ export async function scrape() {
       const items = await getItems(page).then((items) => items.flatMap(toItem))
       results.push(...items)
 
-      // Check reasonable time range
-      const atleastOneItemIsForTomorrow = items.some(
-        (item) => convertTimeStringToNumber(item.timeRemaining) > 24 * 60 * 60
-      )
-
-      if (atleastOneItemIsForTomorrow) {
-        console.log('Found at least one item for tomorrow. Stop scraping... 🛑')
-
-        break
-      }
-
       nextPage = await getNextPageEl(page)
     }
 

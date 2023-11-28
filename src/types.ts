@@ -14,4 +14,5 @@ export type Item = {
   price: number
   timeRemaining: number
   createdAt: string
+  model?: string
 }
